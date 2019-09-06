@@ -10,7 +10,7 @@ if (ENVIRONMENT == "development") {
     $config['dbhost'] = "localhost";
     $config['dbname'] = "apparking";
     $config['dbuser'] = "caio";
-    $config['dbpass'] = "Caio1995";
+    $config['dbpass'] = "";
 }
 else {
     $config['dbtype'] = "";
@@ -21,9 +21,15 @@ else {
 }
 
 try {
+
+    $driver_config = array(
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    );
+
     global $pdo;
-    $pdo = new PDO("{$config['dbtype']}:dbname={$config['dbname']};host={$config['dbhost']}", $config['dbuser'], $config['dbpass']);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO("{$config['dbtype']}:dbname={$config['dbname']};host={$config['dbhost']}", $config['dbuser'], $config['dbpass'], $driver_config);
+
 } catch(PDOException $e) {
     echo "Falhou: " . $e->getMessage();
     exit;
