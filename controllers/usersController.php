@@ -21,14 +21,15 @@ class usersController {
 
             $data = json_decode($data, true);
 
-            if (!empty($data['email']) && !empty($data['password'])) {
+            if (!empty($data['name']) && !empty($data['email']) && !empty($data['password'])) {
 
                 $users = new Users();
 
+                $name = addslashes($data['name']);
                 $email = addslashes($data['email']);
                 $password = addslashes($data['password']);
 
-                if ($users->signIn($email, $password)) {
+                if ($users->signIn($name, $email, $password)) {
                     $error = 0;
                     $message = "Usuário cadastrado com sucesso.";
                     $user = $users->getUser($email);

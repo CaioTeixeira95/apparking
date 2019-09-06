@@ -53,7 +53,7 @@ class Users extends Model {
 
     }
 
-    public function signIn($email, $password) {
+    public function signIn($name, $email, $password) {
 
         $password = md5($password);
 
@@ -61,9 +61,10 @@ class Users extends Model {
 
             try {
 
-                $sql  = "INSERT INTO users (email, password) VALUES (:email, :password)";
+                $sql  = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
                 $stmt = $this->pdo->prepare($sql);
 
+                $stmt->bindValue(":name", $name);
                 $stmt->bindValue(":email", $email);
                 $stmt->bindValue(":password", $password);
 
