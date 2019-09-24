@@ -15,15 +15,21 @@ class ParkingLot extends Model {
 
         try {
 
-            $sql  = "INSERT INTO parkinglot (lot_number, lot_type) VALUES (:lot_number, :lot_type)";
-            $stmt = $this->pdo->prepare($sql);
+            if ($this->verifyLotNumber($lot_number)) {
 
-            $stmt->bindValue(":lot_number", $lot_number);
-            $stmt->bindValue(":lot_type", $lot_type);
+                $sql  = "INSERT INTO parkinglot (lot_number, lot_type) VALUES (:lot_number, :lot_type)";
+                $stmt = $this->pdo->prepare($sql);
 
-            $stmt->execute();
+                $stmt->bindValue(":lot_number", $lot_number);
+                $stmt->bindValue(":lot_type", $lot_type);
 
-            return true;
+                $stmt->execute();
+
+                return true;
+
+            }
+
+            return false;
 
         } catch(PDOException $e) {
             echo "Falhou: " . $e->getMessage();
@@ -34,7 +40,7 @@ class ParkingLot extends Model {
 
     }
 
-    public function updateStatus($id, $busy) {
+    public function updateStatus($lot_number, $busy) {
 
         try {
 
@@ -57,6 +63,19 @@ class ParkingLot extends Model {
         }
 
         return false;
+
+    }
+
+    public function verifyLotNumber($lot_number) {
+
+        $sql  = "SELECT * FROM parkinglot WHERE lot_number = :lot_number";
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->bindValue(":lot_number", $lot_number);
+
+        $stmt->execute();
+
+        return $stmt->rowCount() == 0;
 
     }
 

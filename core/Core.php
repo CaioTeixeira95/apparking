@@ -13,7 +13,7 @@ class Core {
         $params = array();
 
         if (!empty($url) && $url != "/") {
-            
+
             $url = explode("/", $url);
             array_shift($url);
 
@@ -39,7 +39,7 @@ class Core {
         }
 
         if (!file_exists("controllers/$currentController.php") || !method_exists($currentController, $currentAction)) {
-            $currentController = "parklotController";
+            $currentController = "notfoundController";
             $currentAction = "index";
         }
 

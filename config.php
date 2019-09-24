@@ -6,13 +6,15 @@ $config = array();
 
 // Defining the database configuration
 if (ENVIRONMENT == "development") {
+    define("BASE_URL", "http://apparking.com.br/");
     $config['dbtype'] = "pgsql";
     $config['dbhost'] = "localhost";
     $config['dbname'] = "apparking";
     $config['dbuser'] = "caio";
-    $config['dbpass'] = "";
+    $config['dbpass'] = "Caio1995";
 }
 else {
+    define("BASE_URL", "https://www.apparkingfatec2.000webhostapp.com/");
     $config['dbtype'] = "";
     $config['dbhost'] = "";
     $config['dbname'] = "";

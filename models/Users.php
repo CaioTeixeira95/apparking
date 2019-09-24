@@ -4,7 +4,11 @@ class Users extends Model {
 
     public function list() {
 
-        $sql  = "SELECT * FROM users";
+        $sql  = " SELECT id,
+                         name,
+                         email,
+                         admin 
+                    FROM users";
         $stmt = $this->pdo->query($sql);
 
         return $stmt->fetchAll();
@@ -15,7 +19,13 @@ class Users extends Model {
 
         $password = md5($password);
 
-        $sql = "SELECT * FROM users WHERE email = :email AND password = :password";
+        $sql = " SELECT id,
+                        name,
+                        email,
+                        admin
+                   FROM users 
+                  WHERE email = :email 
+                    AND password = :password";
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->bindValue(":email", $email);

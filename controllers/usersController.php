@@ -1,17 +1,26 @@
 <?php
 
-class usersController {
+class usersController extends Controller {
 
     public function index() {
 
         $users = new Users();
 
-        header("Content-Type: application/json");
-        echo json_encode(array("users" => $users->list()));
+        $this->headers('get');
+
+        try {
+            http_response_code(200);
+            echo json_encode(array("users" => $users->list()));
+        } catch(Exception $e) {
+            http_response_code(500);
+            echo json_encode(array("message" => "Server error."));
+        }
 
     }
 
     public function signin() {
+
+        $this->headers('post');
 
         $data = file_get_contents("php://input");
 
@@ -30,24 +39,31 @@ class usersController {
                 $password = addslashes($data['password']);
 
                 if ($users->signIn($name, $email, $password)) {
+                    http_response_code(200);
                     $error = 0;
                     $message = "Usuário cadastrado com sucesso.";
                     $user = $users->getUser($email);
                 }
                 else {
+                    http_response_code(200);
                     $error = 1;
                     $message = "E-mail já cadastrado.";
                 }
 
             }
+            else {
+                http_response_code(400);
+                $error = 2;
+                $message = "Informações incorretas.";
+            }
 
         }
         else {
+            http_response_code(400);
             $error = 2;
             $message = "Informe corretamente e-mail e senha.";
         }
 
-        header("Content-Type: application/json");
         echo json_encode(
             array(
                 "error" => $error,
@@ -59,6 +75,8 @@ class usersController {
     }
 
     public function login() {
+
+        $this->headers('get');
 
         $data = file_get_contents("php://input");
 
@@ -78,23 +96,30 @@ class usersController {
                 $user = $users->login($email, $password);
 
                 if (count($user) > 0) {
+                    http_response_code(200);
                     $error = 0;
                     $message = "Login efetuado com sucesso.";
                 }
                 else {
+                    http_response_code(200);
                     $error = 1;
                     $message = "Usuário ou senha incorretos.";
                 }
 
             }
+            else {
+                http_response_code(400);
+                $error = 2;
+                $message = "Informações incorretas.";
+            }
 
         }
         else {
+            http_response_code(400);
             $error = 2;
             $message = "Informe corretamente e-mail e senha.";
         }
 
-        header("Content-Type: application/json");
         echo json_encode(
             array(
                 "error" => $error,
